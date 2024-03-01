@@ -1,19 +1,30 @@
-const Message = () => {
+import { extractTime } from "../../../utils/extractTime";
+import { useAuthContext } from "../../context/AuthContext";
+import useConversation from "../../store/useConversation";
+
+const Message = ({ message }) => {
+  const { authUser } = useAuthContext();
+  const { selectedConversation } = useConversation();
+  const fromUser = message.senderId === authUser._id;
+  const formatedTime = extractTime(message.createdAt);
+  const chatClassName = fromUser ? "chat-end" : "chat-start";
+  const profilePic = fromUser
+    ? authUser.profilePic
+    : selectedConversation?.profilePic;
+  const bubbleBgColor = fromUser ? "bg-blue-500" : "";
+
   return (
-    <div className="chat chat-end">
+    <div className={`chat ${chatClassName}`}>
       <div className=" chat-image avatar">
         <div className="w-10 rounded-full">
-          <img
-            src={
-              "https://cdn1.iconfinder.com/data/icons/user-avatar-26/1000/Profile-Person-Man-Woman-People-Female-Male-Account0A_013_SVG-512.png"
-            }
-            alt="Taiwind css chat bubble "
-          />
+          <img src={profilePic} alt="Taiwind css chat bubble " />
         </div>
       </div>
-      <div className={"chat-bubble text-white bg-blue-500"}>hello</div>
+      <div className={`chat-bubble text-white ${bubbleBgColor}`}>
+        {message.message}
+      </div>
       <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">
-        12:12
+        {formatedTime}
       </div>
     </div>
   );
