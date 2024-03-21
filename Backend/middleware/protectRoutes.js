@@ -17,7 +17,7 @@ const protectRoutes = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    res.status(500).json({ message: "something wentg wrong" });
+    res.status(500).json({ message: "something went wrong" });
   }
 };
 export default protectRoutes;
